@@ -16,7 +16,7 @@
             <feature name="ParsePlugin">
                 <param name="android-package" value="org.apache.cordova.core.ParsePlugin" />
             </feature>
-			 <feature name="SqliteController">
+			 <feature name="ParsePlugin">
                 <param name="android-package" value="org.apache.cordova.core.SqliteController" />
             </feature>
         </config-file>
