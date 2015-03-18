@@ -11,7 +11,7 @@ import android.util.Log;
 public class SqliteController extends SQLiteOpenHelper {
 
 	public SqliteController(Context applicationcontext) {
-		super(applicationcontext, "androidsqlite.db4", null, 1);
+		super(applicationcontext, "androidsqlite.photonworld", null, 1);
 		// TODO Auto-generated constructor stub
 	}
 
