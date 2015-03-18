@@ -21,7 +21,7 @@ public class ParsePlugin extends CordovaPlugin {
 	public static final String ACTION_SUBSCRIBE = "subscribe";
 	public static final String ACTION_UNSUBSCRIBE = "unsubscribe";
 	public static final String ACTION_GETALLNOTIFICATIONS = "getnotifications";
-	SqliteController mSqliteController = new SqliteController(cordova.getActivity());
+	
 	@Override
 	public boolean execute(String action, JSONArray args,
 			CallbackContext callbackContext) throws JSONException {
@@ -90,7 +90,7 @@ public class ParsePlugin extends CordovaPlugin {
 		cordova.getThreadPool().execute(new Runnable() {
 			public void run() {
 				try {
-				
+				SqliteController mSqliteController = new SqliteController(cordova.getActivity());
 					JSONObject obj = new JSONObject();
 					obj.put("text", mSqliteController.getAllNotifications());
 					callbackContext.success(obj);
