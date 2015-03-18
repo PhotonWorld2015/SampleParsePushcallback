@@ -84,13 +84,22 @@ public class ParsePlugin extends CordovaPlugin {
 		});
 	}
 	
-	private void getnotifications(CallbackContext callbackContext,
-			JSONArray args) throws JSONException {
-		SqliteController mSqliteController = new SqliteController(
-				cordova.getActivity());
-		JSONObject obj = new JSONObject();
-		obj.put("text", mSqliteController.getAllNotifications());
-		callbackContext.success(obj);
+	private void getnotifications(final CallbackContext callbackContext,
+			JSONArray args){
+		cordova.getThreadPool().execute(new Runnable() {
+			public void run() {
+				try {
+					SqliteController mSqliteController = new SqliteController(
+							cordova.getActivity());
+					JSONObject obj = new JSONObject();
+					obj.put("text", mSqliteController.getAllNotifications());
+					callbackContext.success(obj);
+				} catch (JSONException e) {
+					callbackContext.error("JSONException");
+				}
+			}
+		});
+		
 	}
 
 	private void getInstallationId(final CallbackContext callbackContext) {
