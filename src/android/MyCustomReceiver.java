@@ -40,7 +40,7 @@ public class MyCustomReceiver extends BroadcastReceiver {
 						if (key.equals("alert")) {
 							msg = json.getString(key);
 							if (msg != null) {
-								mSqliteController.insertNotification(msg);
+								mSqliteController.insertNotification( new Notifications(msg));
 							}
 
 						}

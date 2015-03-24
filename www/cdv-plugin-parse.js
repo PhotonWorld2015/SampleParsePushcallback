@@ -21,6 +21,17 @@ var parsePlugin = {
             []
         );
     },
+	
+	updatereadStatus: function(id,flag,successCallback, errorCallback) {
+	alert("updatereadStatus");
+        cordova.exec(
+            successCallback,
+            errorCallback,
+            'ParsePlugin',
+            'updatereadStatus',
+            [id,flag]
+        );
+    },
 
     getInstallationId: function(successCallback, errorCallback) {
         cordova.exec(

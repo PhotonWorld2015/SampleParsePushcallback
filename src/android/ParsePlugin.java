@@ -1,5 +1,6 @@
 package org.apache.cordova.core;
 
+import java.util.List;
 import java.util.Set;
 
 import org.apache.cordova.CallbackContext;
@@ -21,6 +22,7 @@ public class ParsePlugin extends CordovaPlugin {
 	public static final String ACTION_SUBSCRIBE = "subscribe";
 	public static final String ACTION_UNSUBSCRIBE = "unsubscribe";
 	public static final String ACTION_GETALLNOTIFICATIONS = "getnotifications";
+	public static final String ACTION_UPDATEREADSTATUS = "updatereadStatus";
 	
 	@Override
 	public boolean execute(String action, JSONArray args,
@@ -32,6 +34,11 @@ public class ParsePlugin extends CordovaPlugin {
 		
 		if (action.equals(ACTION_GETALLNOTIFICATIONS)) {
 			this.getnotifications(callbackContext, args);
+			return true;
+		}
+		
+		if (action.equals(ACTION_UPDATEREADSTATUS)) {
+			this.updatereadStatus(callbackContext, args);
 			return true;
 		}
 
@@ -59,7 +66,6 @@ public class ParsePlugin extends CordovaPlugin {
 		return false;
 	}
 
-	
 
 	private void initialize(final CallbackContext callbackContext,
 			final JSONArray args) {
@@ -74,10 +80,6 @@ public class ParsePlugin extends CordovaPlugin {
 					ParseInstallation.getCurrentInstallation()
 							.saveInBackground();
 					callbackContext.success();
-					/*PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, obj);
-		            pluginResult.setKeepCallback(true);
-		            callbackContext.sendPluginResult(pluginResult);
-*/
 				} catch (JSONException e) {
 					callbackContext.error("JSONException");
 				}
@@ -91,9 +93,20 @@ public class ParsePlugin extends CordovaPlugin {
 			public void run() {
 				try {
 				SqliteController mSqliteController = new SqliteController(cordova.getActivity());
-					JSONObject obj = new JSONObject();
-					obj.put("text", mSqliteController.getAllNotifications());
-					callbackContext.success(obj);
+					List<Notifications> mListnNotifications = mSqliteController.getAllNotifications();
+					JSONArray mJsonArray = new JSONArray();
+					
+					for(Notifications mNotifications : mListnNotifications){
+						JSONObject mJsonObject = new JSONObject();
+						mJsonObject.accumulate("id", mNotifications.getId());
+						mJsonObject.accumulate("message", mNotifications.getMessage());
+						mJsonObject.accumulate("flag", mNotifications.getFlag());
+						mJsonObject.accumulate("navigate", mNotifications.getNavigate());
+						mJsonObject.accumulate("btnsts", mNotifications.getBtnsts());
+					   mJsonArray.put(mJsonObject);
+					}
+					
+					callbackContext.success(mJsonArray);
 				} catch (JSONException e) {
 					callbackContext.error("JSONException");
 				}
@@ -101,6 +114,40 @@ public class ParsePlugin extends CordovaPlugin {
 		});
 		
 	}
+	
+	private void updatereadStatus(final CallbackContext callbackContext,
+			final JSONArray args) {
+		cordova.getThreadPool().execute(new Runnable() {
+			public void run() {
+				try {
+			String id = args.getString(0);
+			String flag = args.getString(1);
+			SqliteController mSqliteController = new SqliteController(cordova.getActivity());
+			mSqliteController.updateNotification(id,flag);
+			
+			List<Notifications> mListnNotifications = mSqliteController.getAllNotifications();
+			JSONArray mJsonArray = new JSONArray();
+			
+			for(Notifications mNotifications : mListnNotifications){
+				JSONObject mJsonObject = new JSONObject();
+				mJsonObject.accumulate("id", mNotifications.getId());
+				mJsonObject.accumulate("message", mNotifications.getMessage());
+				mJsonObject.accumulate("flag", mNotifications.getFlag());
+				mJsonObject.accumulate("navigate", mNotifications.getNavigate());
+				mJsonObject.accumulate("btnsts", mNotifications.getBtnsts());
+			   mJsonArray.put(mJsonObject);
+			}
+			
+					callbackContext.success(mJsonArray);
+				} catch (JSONException e) {
+					callbackContext.error("JSONException");
+				}
+			}
+		});
+		
+	}
+
+
 
 	private void getInstallationId(final CallbackContext callbackContext) {
 		cordova.getThreadPool().execute(new Runnable() {
