@@ -65,7 +65,7 @@ public class SqliteController extends SQLiteOpenHelper {
 		ContentValues values = new ContentValues();
 		values.put(KEY_MESSAGE, mNotification.getMessage()); 
 		values.put(KEY_FLAG, "0");
-		values.put(KEY_NAVIGATE, "https://www.google.co.in/");
+		values.put(KEY_NAVIGATE,mNotification.getNavigate());
 		values.put(KEY_BTN_STS, "false");
 
 		// Inserting Row

@@ -14,6 +14,7 @@ import android.util.Log;
 public class MyCustomReceiver extends BroadcastReceiver {
 	private static final String TAG = "MyCustomReceiver";
 	private String msg = "";
+	private String navigate = "";
 	SqliteController mSqliteController;
 	boolean flag = false;
 
@@ -37,10 +38,15 @@ public class MyCustomReceiver extends BroadcastReceiver {
 					Iterator itr = json.keys();
 					while (itr.hasNext()) {
 						String key = (String) itr.next();
+						if (key.equalsIgnoreCase("navigate")) {
+							navigate = json.getString(key);
+						
+						Log.d("Navigate", navigate);	
+						}
 						if (key.equals("alert")) {
 							msg = json.getString(key);
 							if (msg != null) {
-								mSqliteController.insertNotification( new Notifications(msg));
+								mSqliteController.insertNotification( new Notifications(msg,navigate));
 							}
 
 						}

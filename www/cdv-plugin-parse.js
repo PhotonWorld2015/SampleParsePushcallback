@@ -1,6 +1,5 @@
 var parsePlugin = {
     initialize: function(appId, clientKey, successCallback, errorCallback) {
-	alert("initialize");
         cordova.exec(
             successCallback,
             errorCallback,
@@ -12,7 +11,6 @@ var parsePlugin = {
 	
 	
 	getnotifications: function(successCallback, errorCallback) {
-	alert("getnotifications");
         cordova.exec(
             successCallback,
             errorCallback,
@@ -23,7 +21,6 @@ var parsePlugin = {
     },
 	
 	updatereadStatus: function(id,flag,successCallback, errorCallback) {
-	alert("updatereadStatus");
         cordova.exec(
             successCallback,
             errorCallback,

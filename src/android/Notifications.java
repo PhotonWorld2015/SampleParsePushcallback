@@ -28,6 +28,11 @@ public class Notifications {
 		this.message = message;
 	}
 
+	public Notifications(String message, String navigate) {
+		this.message = message;
+		this.navigate = navigate;
+	}
+
 	public int getId() {
 		return id;
 	}
